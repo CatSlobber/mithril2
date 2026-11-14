@@ -1,0 +1,69 @@
+name: Release Mithril
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions: {}
+
+concurrency:
+  group: mithril-publish
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      base-image: ${{ steps.base.outputs.image }}
+      base-digest: ${{ steps.base.outputs.digest }}
+    steps:
+      - name: Check out release
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Validate release tag
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag=${GITHUB_REF_NAME}
+          if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            printf 'Invalid release tag: %s\n' "$tag" >&2
+            exit 1
+          fi
+          printf 'version=%s\n' "${tag#v}" >>"$GITHUB_OUTPUT"
+
+      - name: Install skopeo
+        shell: bash
+        run: |
+          if ! command -v skopeo >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install --yes skopeo
+          fi
+
+      - name: Resolve Fedora base image
+        id: base
+        shell: bash
+        run: |
+          set -euo pipefail
+          image=$(scripts/resolve-base-image.sh quay.io/fedora/fedora-bootc:45)
+          printf 'image=%s\n' "$image" >>"$GITHUB_OUTPUT"
+          printf 'digest=%s\n' "${image##*@}" >>"$GITHUB_OUTPUT"
+
+  image:
+    needs: prepare
+    uses: ./.github/workflows/build-image.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      source-ref: ${{ github.ref_name }}
+      version: ${{ needs.prepare.outputs.version }}
+      build-id: release
+      channel: release
+      base-image: ${{ needs.prepare.outputs.base-image }}
+      base-digest: ${{ needs.prepare.outputs.base-digest }}
+      tags: ${{ format('{0} stable latest auto', github.ref_name) }}
