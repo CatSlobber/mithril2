@@ -1,0 +1,11 @@
+[Unit]
+Description=Check for Mithril updates hourly
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=10m
+Unit=mithril-update.service
+
+[Install]
+WantedBy=timers.target
