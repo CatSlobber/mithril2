@@ -1,0 +1,17 @@
+[Unit]
+Description=Download and stage Mithril updates
+Documentation=https://github.com/CatSlobber/mithril2
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=1h
+StartLimitBurst=2
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/mithril-update-automatic
+Nice=10
+IOSchedulingClass=idle
+CPUWeight=10
+IOWeight=10
+Restart=on-failure
+RestartSec=5m
