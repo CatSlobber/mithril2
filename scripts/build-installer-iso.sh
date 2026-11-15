@@ -15,7 +15,7 @@ fi
 
 installer_version=${version%.*}
 base_image=${BASE_IMAGE:-quay.io/fedora/fedora-bootc:45}
-payload_image=${PAYLOAD_IMAGE:-ghcr.io/catslobber/mithril:auto}
+payload_image=${PAYLOAD_IMAGE:-ghcr.io/catslobber/mithril2:auto}
 builder_image=${BUILDER_IMAGE:-ghcr.io/osbuild/image-builder-cli:latest}
 output_dir=${OUTPUT_DIR:-"$PWD/output/installer-v${version}"}
 
