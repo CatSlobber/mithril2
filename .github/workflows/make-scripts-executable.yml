@@ -1,4 +1,4 @@
-name: Make File Executable
+name: Make Scripts Executable
 
 on:
   workflow_dispatch: # Allows you to run this manually with a button click
