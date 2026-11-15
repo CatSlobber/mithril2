@@ -11,11 +11,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Change permission
-        run: chmod +x rootfs/usr/bin/release
-        run: chmod +x scripts/build-installer-iso.sh
-        run: chmod +x scripts/latest-release-tag.sh
-        run: chmod +x scripts/prune-auto-images.sh
-        run: chmod +x scripts/resolve-base-image.sh
+        run: chmod +x rootfs/usr/bin/release scripts/*
 
       - name: Commit and Push changes
         run: |
