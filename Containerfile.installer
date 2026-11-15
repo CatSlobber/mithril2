@@ -30,6 +30,8 @@ RUN dnf5 install -y \
 RUN mkdir -p /boot/efi \
     && cp -ra /usr/lib/efi/*/*/EFI /boot/efi
 
+COPY installer-rootfs/ /
+
 RUN printf '%s\n' \
         'NAME="Mithril Installer"' \
         "VERSION=\"${MITHRIL_VERSION}\"" \
@@ -37,7 +39,7 @@ RUN printf '%s\n' \
         'ID_LIKE=fedora' \
         "VERSION_ID=\"${MITHRIL_DISTRO_VERSION}\"" \
         "BUILD_ID=\"${MITHRIL_BUILD_ID}\"" \
-        "PRETTY_NAME=\"Mithril ${SPACEOS_VERSION} Installer\"" \
+        "PRETTY_NAME=\"Mithril ${MITHRIL_VERSION} Installer\"" \
         'HOME_URL="https://github.com/CatSlobber/mithril2"' \
         'BUG_REPORT_URL="https://github.com/CatSlobber/mithril/issues"' \
         >/usr/lib/os-release \
