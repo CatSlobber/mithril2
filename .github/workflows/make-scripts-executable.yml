@@ -11,7 +11,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Change permission
-        run: chmod +x rootfs/usr/bin/release scripts/*
+        run: chmod +x rootfs/usr/bin/release
+        
+      - name: Change permission
+        run: chmod +x scripts/*
 
       - name: Commit and Push changes
         run: |
