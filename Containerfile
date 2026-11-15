@@ -4,7 +4,7 @@
 
 ARG FEDORA_VERSION=45
 ARG BASE_IMAGE=quay.io/fedora/fedora-bootc:${FEDORA_VERSION}
-ARG FEDORA_SIGNING_KEY_ID=6d9f90a6
+ARG FEDORA_SIGNING_KEY_ID=f577861e
 ARG MITHRIL_VERSION=0.0.0-devel
 ARG MITHRIL_BUILD_ID=local
 
@@ -83,10 +83,12 @@ RUN set -eux \
         bash-color-prompt \
         bash-completion \
         bluez \
+        cairo \
         exfatprogs \
         fedora-flathub-remote \
         fuse-libs \
         gamemode \
+        gdk-pixbuf2 \
         git \
         glibc-langpack-en \
         libcamera \
