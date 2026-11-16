@@ -14,16 +14,54 @@ FROM ${BASE_IMAGE}
 # Firmware, GNOME Desktop, and packages
 # ============================================================
 
+ADD https://negativo17.org/repos/fedora-multimedia.repo /etc/yum.repos.d/negativo17-fedora-multimedia.repo
+#RUN sudo dnf config-manager setopt fedora-multimedia.enabled=1
+#RUN sudo dnf config-manager setopt fedora-multimedia.priority=90
+
+RUN set -eux \
+    && : "negativo17 Codecs" \
+    && dnf install -y --from-repo=fedora-multimedia \
+        ffmpeg \
+        ffmpeg-libs \
+#        heif-pixbuf-loader \
+        intel-gmmlib \
+        intel-mediasdk \
+        intel-vaapi-driver \
+        libavcodec \
+        libfdk-aac \
+        libheif \
+#        libopenjph \
+        libva \
+        libva-intel-media-driver \
+        libva-utils \
+        mesa-dri-drivers \
+        mesa-filesystem \
+        mesa-libEGL \
+        mesa-libGL \
+        mesa-libgbm \
+        mesa-va-drivers \
+        mesa-vulkan-drivers \
+        pipewire-libs-extra
+#    && dnf clean all
+
+ADD https://negativo17.org/repos/fedora-steam.repo /etc/yum.repos.d/negativo17-fedora-steam.repo
+#RUN sudo dnf config-manager setopt fedora-steam.enabled=1
+#RUN sudo dnf config-manager setopt fedora-steam.priority=90
+
+RUN set -eux \
+    && : "negativo17 Steam" \
+    && dnf install -y --from-repo=fedora-steam \
+        steam
+#    && dnf clean all
+
 RUN set -eux \
     && : "Fedora Hardware Support packages" \
-    && dnf -y group install "Hardware Support" --allow-downgrade --allowerasing --setopt=install_weak_deps=False \
+    && dnf -y group install hardware-support \
     && : "Fedora GNOME Desktop packages" \
     && dnf install -y \
-        avahi \
         baobab \
         dconf \
         gdm \
-        glib-networking \
         glycin-thumbnailer \
         gnome-bluetooth \
         gnome-boxes \
@@ -45,8 +83,6 @@ RUN set -eux \
         gnome-user-share \
         gst-thumbnailers \
         gvfs-afc \
-        gvfs-afp \
-        gvfs-archive \
         gvfs-fuse \
         gvfs-goa \
         gvfs-gphoto2 \
@@ -64,11 +100,8 @@ RUN set -eux \
         NetworkManager-ssh-gnome \
         NetworkManager-vpnc-gnome \
         NetworkManager-wwan \
-        PackageKit-command-not-found \
-        PackageKit-gtk3-module \
         papers \
         papers-nautilus \
-        polkit \
         ptyxis \
         snapshot \
         sushi \
@@ -81,73 +114,24 @@ RUN set -eux \
     && dnf install -y \
         adw-gtk3-theme \
         bash-color-prompt \
-        bash-completion \
-        bluez \
-        cairo \
-        exfatprogs \
+        dnf5-plugins \
         fedora-flathub-remote \
         fuse-libs \
         gamemode \
-        gdk-pixbuf2 \
         git \
         glibc-langpack-en \
-        libcamera \
         libcamera-gstreamer \
-        libcamera-ipa \
         libcamera-tools \
         libimobiledevice-utils \
         libratbag-ratbagd \
         libvirt \
-        libvirt-client \
         libvirt-nss \
         mtr \
-        NetworkManager-wifi \
-        pipewire-libs-extra \
-        pipewire-plugin-libcamera \
         rclone \
         rsync \
         symlinks \
-        usbmuxd \
         uv \
         virt-manager \
-    && dnf clean all
-
-RUN sudo dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-multimedia.repo
-RUN sudo dnf config-manager setopt fedora-multimedia.priority=90
-
-RUN set -eux \
-    && : "negativo17 Codecs" \
-    && dnf distro-sync -y --repo='fedora-multimedia' \
-        ffmpeg \
-        ffmpeg-libs \
-        heif-pixbuf-loader \
-        intel-gmmlib \
-        intel-mediasdk \
-        intel-vaapi-driver \
-        libavcodec \
-        libfdk-aac \
-        libheif \
-        libopenjph \
-        libva \
-        libva-intel-media-driver \
-        libva-utils \
-        mesa-dri-drivers \
-        mesa-filesystem \
-        mesa-libEGL \
-        mesa-libGL \
-        mesa-libgbm \
-        mesa-va-drivers \
-        mesa-vulkan-drivers \
-        pipewire-libs-extra \
-    && dnf clean all
-
-RUN sudo dnf config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-steam.repo
-RUN sudo dnf config-manager setopt fedora-steam.priority=90
-
-RUN set -eux \
-    && : "negativo17 Steam" \
-    && dnf distro-sync -y --repo='fedora-steam' \
-        steam
     && dnf clean all
 
 # ============================================================
